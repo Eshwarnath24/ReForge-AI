@@ -1,41 +1,24 @@
-import sqlite3
 import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "reforge.db")
+load_dotenv()
 
+MONGODB_URI = os.getenv("MONGODB_URI")
 
-def get_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+_client = MongoClient(MONGODB_URI)
+_db = _client["reforge_ai"]
+
+users_collection = _db["users"]
+feedback_collection = _db["feedback"]
 
 
 def init_db():
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            hashed_password TEXT NOT NULL,
-            created_at TEXT DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS feedback (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            source TEXT NOT NULL,
-            item_id TEXT NOT NULL,
-            title TEXT,
-            tags TEXT,
-            vote TEXT NOT NULL,
-            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users (id)
-        )
-    """)
-
-    conn.commit()
-    conn.close()
+    """
+    MongoDB creates collections lazily, but we set up indexes here
+    so duplicate signups and lookups stay fast and safe.
+    """
+    users_collection.create_index("email", unique=True)
+    feedback_collection.create_index([("source", 1), ("item_id", 1)])
+    feedback_collection.create_index("user_id")
+    print("MongoDB connected and indexes ensured.")

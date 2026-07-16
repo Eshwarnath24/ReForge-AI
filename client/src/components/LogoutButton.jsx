@@ -7,11 +7,13 @@ function LogoutButton({ onLogout }) {
   }
 
   return (
-    <div className="flex items-center justify-between mb-4">
-      <span className="text-sm text-gray-600">Logged in as {getEmail()}</span>
+    <div className="flex items-center gap-3">
+      <span className="text-xs text-green-700/50 font-medium hidden sm:inline">
+        {getEmail()}
+      </span>
       <button
         onClick={handleLogout}
-        className="text-sm text-red-600 hover:underline"
+        className="text-xs text-gray-400 hover:text-red-500 font-medium px-2.5 py-1 rounded-lg hover:bg-red-50 transition-all bg-transparent"
       >
         Log out
       </button>

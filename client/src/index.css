@@ -1,31 +1,24 @@
 @import "tailwindcss";
 
+/* ── Base reset & typography ──────────────────────────── */
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background: #f0f4f0;
-  color: #1a1a1a;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #f4f7f4;
+  color: #1a2e1a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
-  color: #2e7d32;
-  margin-bottom: 5px;
+h1, h2, h3 {
+  line-height: 1.25;
 }
 
-h2 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-}
-
-h3 {
-  margin: 0 0 8px 0;
-  color: #2e7d32;
-}
-
+/* ── Form elements ────────────────────────────────────── */
 label {
   display: block;
   font-weight: 600;
@@ -35,53 +28,102 @@ label {
 select,
 input[type="file"] {
   padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid #d1d9d1;
   font-size: 0.95rem;
+  font-family: inherit;
 }
 
+/* ── Buttons ──────────────────────────────────────────── */
 button {
-  background: #2e7d32;
-  color: white;
+  font-family: inherit;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background 0.2s ease;
-}
-
-button:hover:not(:disabled) {
-  background: #256428;
+  transition: all 0.2s ease;
 }
 
 button:disabled {
-  background: #a5a5a5;
   cursor: not-allowed;
 }
 
+/* ── Error box ────────────────────────────────────────── */
 .error-box {
   background: #fdecea;
   color: #b3261e;
   border: 1px solid #f5c6c3;
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-top: 15px;
 }
 
-.spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #ffffff55;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-@keyframes spin {
+/* ── Analyzing overlay animations ─────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-4px); }
+}
+
+.stage-message-enter {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.dot-animation span:nth-child(1) { animation: dotBounce 1.2s ease-in-out 0s infinite; }
+.dot-animation span:nth-child(2) { animation: dotBounce 1.2s ease-in-out 0.15s infinite; }
+.dot-animation span:nth-child(3) { animation: dotBounce 1.2s ease-in-out 0.3s infinite; }
+
+/* ── Landing page animations ──────────────────────────── */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(3deg); }
+}
+
+@keyframes floatSlowReverse {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-2deg); }
+}
+
+@keyframes fadeInUpLanding {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: floatSlowReverse 5s ease-in-out infinite;
+}
+
+.landing-fade-in {
+  animation: fadeInUpLanding 0.7s ease-out forwards;
+  opacity: 0;
+}
+
+.landing-fade-in-delay-1 { animation-delay: 0.15s; }
+.landing-fade-in-delay-2 { animation-delay: 0.3s; }
+.landing-fade-in-delay-3 { animation-delay: 0.45s; }
+.landing-fade-in-delay-4 { animation-delay: 0.6s; }

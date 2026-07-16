@@ -34,12 +34,11 @@ async def login_controller(email: str, password: str):
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
-    """Shared dependency — used by item_router.py to require login on /analyze and /feedback."""
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-    user = find_user_by_id(int(payload["sub"]))
+    user = find_user_by_id(payload["sub"])
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
 

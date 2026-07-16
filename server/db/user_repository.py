@@ -1,37 +1,36 @@
-from db.database import get_connection
+from bson import ObjectId
+from db.database import users_collection
 
 
 def create_user(email: str, hashed_password: str):
-    conn = get_connection()
-    cursor = conn.cursor()
-    try:
-        cursor.execute(
-            "INSERT INTO users (email, hashed_password) VALUES (?, ?)",
-            (email, hashed_password)
-        )
-        conn.commit()
-        user_id = cursor.lastrowid
-        return {"id": user_id, "email": email}
-    except Exception as e:
-        conn.rollback()
-        raise e
-    finally:
-        conn.close()
+    result = users_collection.insert_one({
+        "email": email,
+        "hashed_password": hashed_password,
+    })
+    return {"id": str(result.inserted_id), "email": email}
 
 
 def find_user_by_email(email: str):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
-    row = cursor.fetchone()
-    conn.close()
-    return dict(row) if row else None
+    doc = users_collection.find_one({"email": email})
+    if not doc:
+        return None
+    return {
+        "id": str(doc["_id"]),
+        "email": doc["email"],
+        "hashed_password": doc["hashed_password"],
+    }
 
 
-def find_user_by_id(user_id: int):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-    row = cursor.fetchone()
-    conn.close()
-    return dict(row) if row else None
+def find_user_by_id(user_id: str):
+    try:
+        doc = users_collection.find_one({"_id": ObjectId(user_id)})
+    except Exception:
+        return None
+
+    if not doc:
+        return None
+    return {
+        "id": str(doc["_id"]),
+        "email": doc["email"],
+        "hashed_password": doc["hashed_password"],
+    }

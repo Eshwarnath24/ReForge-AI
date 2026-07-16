@@ -22,7 +22,7 @@ async def detect_objects_controller(image):
     }
 
 
-async def analyze_item_controller(image, skill_level: str, user_id: int):
+async def analyze_item_controller(image, skill_level: str, user_id: str):
     image_bytes = await image.read()
     image_base64 = base64.b64encode(image_bytes).decode("utf-8")
 
@@ -49,7 +49,7 @@ async def analyze_item_controller(image, skill_level: str, user_id: int):
     }
 
 
-async def feedback_controller(user_id: int, source: str, item_id: str, title: str, tags: list, vote: str):
+async def feedback_controller(user_id: str, source: str, item_id: str, title: str, tags: list, vote: str):
     if vote not in ("like", "dislike"):
         raise ValueError("vote must be 'like' or 'dislike'")
 
