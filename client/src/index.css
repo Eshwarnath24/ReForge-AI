@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #f0f4f0;
+  color: #1a1a1a;
+}
+
+h1 {
+  color: #2e7d32;
+  margin-bottom: 5px;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin: 0 0 8px 0;
+  color: #2e7d32;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+select,
+input[type="file"] {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+
+button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background: #256428;
+}
+
+button:disabled {
+  background: #a5a5a5;
+  cursor: not-allowed;
+}
+
+.error-box {
+  background: #fdecea;
+  color: #b3261e;
+  border: 1px solid #f5c6c3;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 15px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #ffffff55;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

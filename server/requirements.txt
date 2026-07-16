@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+requests
+python-multipart
+python-dotenv
+passlib[bcrypt]
+python-jose[cryptography]
+langchain
+langchain-google-genai
+email-validator
