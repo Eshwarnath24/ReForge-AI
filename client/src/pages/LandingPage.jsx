@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../auth.js";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
 import {
-  Sprout, ScanLine, ArrowRight, Sparkles,
+  Sprout, ScanLine, ArrowRight,
   Database, Bot, Activity,
 } from "../components/Icons.jsx";
 
@@ -38,7 +38,6 @@ function LandingPage() {
               className="group relative px-6 py-2.5 bg-slate-900 text-white rounded-full font-medium text-sm hover:shadow-lg hover:shadow-slate-900/20 hover:-translate-y-0.5 transition-all duration-300"
             >
               Get Started
-              <Sparkles className="w-4 h-4 inline-block ml-2 group-hover:text-emerald-400 transition-colors" />
             </button>
           </div>
         </div>

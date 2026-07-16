@@ -6,7 +6,7 @@ import AnalyzingOverlay, { LOADING_MESSAGES } from "../components/AnalyzingOverl
 import { analyzeItem, sendFeedback } from "../api.js";
 import { isLoggedIn, clearAuth, getEmail } from "../auth.js";
 import {
-  Sprout, UploadCloud, X, Check, Sparkles,
+  Sprout, UploadCloud, X, Check,
   Leaf, Wind, Clock, Wrench, AlertTriangle,
   ThumbsUp, ThumbsDown, Bot, Database, Youtube,
   Target, ChevronRight,
@@ -525,7 +525,6 @@ function ReForgePage() {
                       : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"
                   }`}
                 >
-                  <Sparkles className="w-4 h-4" />
                   Generate Ideas
                 </button>
               </div>
