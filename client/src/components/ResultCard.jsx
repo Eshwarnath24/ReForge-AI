@@ -22,14 +22,14 @@ function MatchItem({ match, index }) {
   const isYoutube = match.source === "youtube_video";
 
   return (
-    <div className={`rounded-2xl p-5 mb-4 bg-white shadow-sm border transition-all duration-200 hover:shadow-md ${
+    <div className={`rounded-3xl p-6 mb-5 bg-white/90 shadow-sm border transition-all duration-300 hover:shadow-md ${
       isYoutube
-        ? "border-l-4 border-l-red-400 border-t-gray-100 border-r-gray-100 border-b-gray-100"
-        : "border-l-4 border-l-green-500 border-t-gray-100 border-r-gray-100 border-b-gray-100"
+        ? "border-l-4 border-l-red-500 border-t-[#e6dfcd]/80 border-r-[#e6dfcd]/80 border-b-[#e6dfcd]/80"
+        : "border-l-4 border-l-[#386641] border-t-[#e6dfcd]/80 border-r-[#e6dfcd]/80 border-b-[#e6dfcd]/80"
     }`}>
       {/* Title + badge row */}
-      <div className="flex items-start gap-2.5 mb-3">
-        <h3 className="text-green-800 font-semibold text-base flex-1 leading-snug">
+      <div className="flex items-start gap-3 mb-4">
+        <h3 className="text-[#1a2f22] font-bold text-lg flex-1 leading-snug">
           #{index + 1} — {match.title}
         </h3>
         {isYoutube ? (
@@ -37,7 +37,7 @@ function MatchItem({ match, index }) {
             <span className="text-[10px]">▶</span> YouTube
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-green-100 text-green-800 whitespace-nowrap border border-green-200">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-[#f4eee2] text-[#234b32] whitespace-nowrap border border-[#e6dfcd]">
             ✓ Verified
           </span>
         )}
@@ -59,18 +59,18 @@ function MatchItem({ match, index }) {
       )}
 
       {/* Reason */}
-      <div className="mb-3 bg-green-50/50 rounded-xl p-3">
-        <p className="text-gray-700 text-sm leading-relaxed">
-          <span className="font-semibold text-green-800">Why this:</span> {match.reason}
+      <div className="mb-4 bg-[#f9f8f3] rounded-2xl p-4 border border-[#e6dfcd]/50">
+        <p className="text-[#1a2f22] text-sm leading-relaxed">
+          <span className="font-bold text-[#234b32]">Why this:</span> {match.reason}
         </p>
       </div>
 
       {/* Difficulty + time */}
-      <div className="flex flex-wrap gap-2 mb-3">
-        <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-lg bg-gray-100 text-gray-700">
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span className="inline-flex items-center text-xs font-bold px-3 py-1.5 rounded-xl bg-[#f4eee2] text-[#4f6355]">
           🎯 {match.difficulty}
         </span>
-        <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-lg bg-gray-100 text-gray-700">
+        <span className="inline-flex items-center text-xs font-bold px-3 py-1.5 rounded-xl bg-[#f4eee2] text-[#4f6355]">
           ⏱ {match.estimated_time_minutes} min
         </span>
       </div>
@@ -89,9 +89,9 @@ function MatchItem({ match, index }) {
 
       {/* Adapted steps */}
       {match.adapted_steps && (
-        <div className="mb-3">
-          <span className="font-semibold text-green-800 text-sm">Steps:</span>
-          <ol className="list-decimal list-inside text-gray-600 text-sm mt-1.5 space-y-1">
+        <div className="mb-4">
+          <span className="font-bold text-[#1a2f22] text-sm">Steps:</span>
+          <ol className="list-decimal list-inside text-[#4f6355] text-sm mt-2 space-y-1.5">
             {match.adapted_steps.map((step, i) => (
               <li key={i} className="leading-relaxed">{step}</li>
             ))}
@@ -124,21 +124,21 @@ function MatchItem({ match, index }) {
       )}
 
       {/* Voting */}
-      <div className="flex gap-2 pt-2 border-t border-gray-100">
+      <div className="flex gap-2 pt-4 border-t border-[#e6dfcd]/60 mt-2">
         <button
           onClick={() => handleVote("like")}
-          className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${voted === "like"
-            ? "bg-green-600 text-white shadow-sm"
-            : "bg-gray-50 text-gray-600 hover:bg-green-50 hover:text-green-700 border border-gray-200"
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${voted === "like"
+            ? "bg-[#386641] text-white shadow-md shadow-[#386641]/20"
+            : "bg-[#f9f8f3] text-[#4f6355] hover:bg-[#f4eee2] hover:text-[#234b32] border border-[#e6dfcd]"
             }`}
         >
           👍 Helpful
         </button>
         <button
           onClick={() => handleVote("dislike")}
-          className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${voted === "dislike"
-            ? "bg-red-500 text-white shadow-sm"
-            : "bg-gray-50 text-gray-600 hover:bg-red-50 hover:text-red-700 border border-gray-200"
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${voted === "dislike"
+            ? "bg-red-600 text-white shadow-md shadow-red-600/20"
+            : "bg-[#f9f8f3] text-[#4f6355] hover:bg-[#f4eee2] hover:text-red-700 border border-[#e6dfcd]"
             }`}
         >
           👎 Not useful
@@ -153,16 +153,16 @@ function ResultCard({ result }) {
 
   if (result.recommendation === "no_suitable_idea") {
     return (
-      <div className="rounded-2xl p-6 mt-2 bg-white border border-gray-100 shadow-sm">
+      <div className="rounded-3xl p-8 mt-2 bg-white/90 border border-[#e6dfcd]/80 shadow-sm backdrop-blur-sm">
         <div className="text-center py-4">
-          <div className="text-4xl mb-3">🤔</div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-2">
+          <div className="text-5xl mb-4">🤔</div>
+          <h2 className="text-xl font-bold text-[#1a2f22] mb-2">
             Hmm, nothing quite fits
           </h2>
-          <p className="text-gray-500 mb-4 max-w-sm mx-auto text-sm leading-relaxed">{result.reason}</p>
-          <div className="bg-green-50 rounded-xl p-4 max-w-sm mx-auto">
-            <p className="text-green-800 text-sm">
-              <span className="font-semibold">Try this instead:</span>{" "}
+          <p className="text-[#4f6355] mb-5 max-w-sm mx-auto text-sm leading-relaxed">{result.reason}</p>
+          <div className="bg-[#f9f8f3] rounded-2xl p-5 border border-[#e6dfcd]/50 max-w-sm mx-auto">
+            <p className="text-[#234b32] text-sm">
+              <span className="font-bold">Try this instead:</span>{" "}
               {result.fallback_suggestion}
             </p>
           </div>
@@ -174,7 +174,7 @@ function ResultCard({ result }) {
   if (result.recommendation === "upcycle" && result.matches) {
     return (
       <div className="mt-2">
-        <h2 className="text-lg font-semibold text-green-900 mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-[#1a2f22] mb-5 flex items-center gap-2">
           <span>✨</span> Here's what you can make
         </h2>
         {result.matches.map((match, index) => (

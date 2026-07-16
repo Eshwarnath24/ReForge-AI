@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import AnimatedBackground from "../components/AnimatedBackground.jsx";
 import { signup, login } from "../api.js";
 import { saveAuth } from "../auth.js";
+import { Sprout, Mail, Lock, LogIn } from "../components/Icons.jsx";
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState("login"); // "login" or "signup"
+  const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,9 +18,10 @@ function AuthPage() {
     setLoading(true);
 
     try {
-      const data = mode === "login"
-        ? await login(email, password)
-        : await signup(email, password);
+      const data =
+        mode === "login"
+          ? await login(email, password)
+          : await signup(email, password);
 
       saveAuth(data.access_token, data.email);
       toast.success(mode === "login" ? "Welcome back!" : "Account created!");
@@ -32,68 +35,85 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{
-      background: "linear-gradient(160deg, #e8f5e9 0%, #f1f8e9 40%, #f9faf9 100%)"
-    }}>
-      <div className="w-full max-w-sm">
-        {/* Back to home */}
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm text-green-700/70 hover:text-green-800 mb-6 transition-colors no-underline"
-        >
-          <span>←</span> Back to home
-        </Link>
+    <div className="min-h-screen relative flex items-center justify-center p-6 font-sans">
+      <AnimatedBackground />
 
-        <div className="bg-white rounded-2xl shadow-sm border border-green-100/80 p-8">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-2xl">♻️</span>
-            <h1 className="text-2xl font-bold text-green-800">ReForge AI</h1>
+      <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 relative z-10 animate-fade-in-up">
+        <div className="flex justify-center mb-6">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <Sprout className="w-6 h-6 text-white" />
           </div>
-          <p className="text-green-700/60 mb-6">
-            {mode === "login" ? "Welcome back! Log in to continue." : "Create an account to get started."}
-          </p>
-
-          <form onSubmit={handleSubmit}>
-            <label className="block font-semibold mb-1.5 text-gray-800 text-sm">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-              className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-gray-50/50 transition-all"
-            />
-
-            <label className="block font-semibold mb-1.5 text-gray-800 text-sm">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              placeholder="At least 6 characters"
-              className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm bg-gray-50/50 transition-all"
-            />
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
-            >
-              {loading ? "Please wait…" : mode === "login" ? "Log In" : "Sign Up"}
-            </button>
-          </form>
-
-          <p className="text-sm text-green-700/60 mt-5 text-center">
-            {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
-            <button
-              onClick={() => setMode(mode === "login" ? "signup" : "login")}
-              className="text-green-700 font-semibold hover:underline bg-transparent p-0 text-sm"
-            >
-              {mode === "login" ? "Sign up" : "Log in"}
-            </button>
-          </p>
         </div>
+
+        <h2 className="text-2xl font-semibold text-slate-900 mb-2 text-center">
+          {mode === "login" ? "Welcome back" : "Create an account"}
+        </h2>
+        <p className="text-slate-500 text-center mb-8 text-sm">
+          {mode === "login"
+            ? "Sign in to sync your tools, skills, and impact data."
+            : "Get started with ReForge AI — it's free."}
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+              Email Address
+            </label>
+            <div className="relative">
+              <Mail className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="you@example.com"
+                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 text-slate-900 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-slate-400"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+              Password
+            </label>
+            <div className="relative">
+              <Lock className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                placeholder="••••••••"
+                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 text-slate-900 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-slate-400"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white font-medium py-4 rounded-xl hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
+          >
+            <LogIn className="w-5 h-5" />
+            {loading
+              ? "Please wait..."
+              : mode === "login"
+                ? "Log In"
+                : "Sign Up"}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-slate-500 mt-8">
+          {mode === "login"
+            ? "New to ReForge?"
+            : "Already have an account?"}{" "}
+          <button
+            onClick={() => setMode(mode === "login" ? "signup" : "login")}
+            className="text-emerald-600 font-medium cursor-pointer hover:text-emerald-700 bg-transparent p-0 text-sm"
+          >
+            {mode === "login" ? "Create an account" : "Log in"}
+          </button>
+        </p>
       </div>
     </div>
   );

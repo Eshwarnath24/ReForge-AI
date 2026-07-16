@@ -1,58 +1,48 @@
-import { useState, useEffect } from "react";
+import { Bot } from "./Icons.jsx";
 
-const STAGES = [
-  { message: "Looking at your photo", delay: 0 },
-  { message: "Checking what\u2019s possible", delay: 3000 },
-  { message: "Comparing a few ideas", delay: 7500 },
-  { message: "Almost done", delay: 13000 },
+export const LOADING_MESSAGES = [
+  "Initializing visual recognition...",
+  "Analyzing material properties...",
+  "Querying ReForge verified database...",
+  "Evaluating YouTube alternatives...",
+  "Calculating environmental impact...",
+  "Finalizing recommendations...",
 ];
 
-function AnalyzingOverlay() {
-  const [currentStage, setCurrentStage] = useState(0);
-
-  useEffect(() => {
-    const timers = STAGES.slice(1).map((stage, i) =>
-      setTimeout(() => setCurrentStage(i + 1), stage.delay)
-    );
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
-  const stage = STAGES[currentStage];
+function AnalyzingOverlay({ currentStep }) {
+  const step = Math.min(currentStep, LOADING_MESSAGES.length - 1);
 
   return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/80 backdrop-blur-sm">
-      <div className="flex flex-col items-center gap-3 px-6 py-8">
-        {/* Pulsing leaf icon */}
-        <div className="text-4xl" style={{ animation: "gentlePulse 2s ease-in-out infinite" }}>
-          🌿
+    <div className="max-w-lg mx-auto w-full text-center py-24 flex flex-col items-center animate-fade-in">
+      {/* Dual-ring spinner */}
+      <div className="relative w-32 h-32 mb-8">
+        <div className="absolute inset-0 border-4 border-slate-100 rounded-full" />
+        <div
+          className="absolute inset-0 border-4 border-emerald-500 rounded-full border-t-transparent border-r-transparent animate-spin"
+          style={{ animationDuration: "1.5s" }}
+        />
+        <div
+          className="absolute inset-4 border-4 border-teal-200 rounded-full border-b-transparent border-l-transparent animate-spin-reverse"
+          style={{ animationDuration: "2s" }}
+        />
+        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-full m-2 shadow-sm">
+          <Bot className="w-10 h-10 text-emerald-500 animate-pulse" />
         </div>
+      </div>
 
-        {/* Stage message */}
-        <p
-          key={currentStage}
-          className="stage-message-enter text-lg font-medium text-green-800 text-center"
-        >
-          {stage.message}
-          <span className="dot-animation inline-flex ml-0.5 gap-0.5">
-            <span className="inline-block text-green-600">.</span>
-            <span className="inline-block text-green-600">.</span>
-            <span className="inline-block text-green-600">.</span>
-          </span>
+      <h3 className="text-2xl font-semibold text-slate-900 mb-2">Agentic Processing</h3>
+      <div className="h-6">
+        <p key={step} className="text-emerald-600 font-medium text-sm animate-pulse">
+          {LOADING_MESSAGES[step]}
         </p>
+      </div>
 
-        {/* Subtle progress dots */}
-        <div className="flex gap-2 mt-2">
-          {STAGES.map((_, i) => (
-            <div
-              key={i}
-              className={`h-1.5 rounded-full transition-all duration-500 ${
-                i <= currentStage
-                  ? "w-6 bg-green-500"
-                  : "w-1.5 bg-green-200"
-              }`}
-            />
-          ))}
-        </div>
+      {/* Progress bar */}
+      <div className="mt-10 w-full max-w-sm bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200/50">
+        <div
+          className="h-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all duration-1000 ease-linear rounded-full"
+          style={{ width: `${((step + 1) / LOADING_MESSAGES.length) * 100}%` }}
+        />
       </div>
     </div>
   );
