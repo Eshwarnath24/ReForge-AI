@@ -34,13 +34,14 @@ export async function login(email, password) {
   return response.data;
 }
 
-export async function analyzeItem(imageFile, skillLevel) {
+export async function analyzeItem(imageFile, skillLevel, signal) {
   const formData = new FormData();
   formData.append("image", imageFile);
   formData.append("skill_level", skillLevel);
 
   const response = await client.post("/analyze", formData, {
     headers: { "Content-Type": "multipart/form-data" },
+    signal,
   });
 
   return response.data;

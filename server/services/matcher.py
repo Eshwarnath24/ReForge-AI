@@ -1,14 +1,9 @@
-import json
-import os
+from db.database import projects_collection
 
-def load_knowledge_base(path: str = None):
-    if path is None:
-        # knowledge_base.json lives at server/ root, one level up from services/
-        path = os.path.join(os.path.dirname(__file__), "..", "knowledge_base.json")
 
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return data["projects"]
+def load_knowledge_base():
+    """Now reads from MongoDB instead of the local JSON file."""
+    return list(projects_collection.find({}, {"_id": 0}))
 
 
 def prefilter_projects(detected_items: list, all_projects: list, max_results: int = 12):

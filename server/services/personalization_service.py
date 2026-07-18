@@ -2,7 +2,7 @@ from collections import Counter
 from db.feedback_repository import get_user_feedback_history
 
 
-def build_user_preference_summary(user_id: int):
+def build_user_preference_summary(user_id: str):
     """
     Looks at a user's past likes/dislikes and builds a short, human-readable
     summary the agent can use as context. Kept simple and explainable —

@@ -240,7 +240,7 @@ function ReForgePage() {
 
   const pendingResult = useRef(null);
   const fileInputRef = useRef(null);
-
+  const abortControllerRef = useRef(null);
   // ── Route protection ───────────────────────────────
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -340,11 +340,16 @@ function ReForgePage() {
     setResult(null);
     pendingResult.current = null;
 
+    abortControllerRef.current = new AbortController();
+
     try {
-      const data = await analyzeItem(selectedImage, skillLevel);
-      // Don't transition yet — let the useEffect message-cycling handle it
+      const data = await analyzeItem(selectedImage, skillLevel, abortControllerRef.current.signal);
       pendingResult.current = data;
     } catch (err) {
+      if (err.code === "ERR_CANCELED" || err.name === "CanceledError") {
+        // User cancelled — already handled in cancelAnalysis(), do nothing here
+        return;
+      }
       console.error(err);
       if (err.code === "ERR_NETWORK") {
         toast.error("Can't reach the server. Is uvicorn running on port 8000?");

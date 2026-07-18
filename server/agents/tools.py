@@ -66,7 +66,7 @@ def get_user_preferences_tool(user_id: str) -> str:
     user's numeric ID as a string. Returns a short text summary to use
     when ranking recommendations for this specific user.
     """
-    summary = build_user_preference_summary(int(user_id))
+    summary = build_user_preference_summary(user_id)
     return summary
 
 

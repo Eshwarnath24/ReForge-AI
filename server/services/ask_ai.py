@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GROK_API_KEY = os.getenv("GROK_API_KEY")
+GEMINI_API_KEY_2 = os.getenv("GEMINI_API_KEY_2")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 
@@ -21,8 +22,8 @@ def safe_parse_json(text: str):
     return json.loads(cleaned)
 
 
-def call_gemini(prompt: str, image_base64: str = None, mime_type: str = "image/jpeg"):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={GEMINI_API_KEY}"
+def _call_gemini_with_key(api_key: str, prompt: str, image_base64: str = None, mime_type: str = "image/jpeg"):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={api_key}"
 
     parts = [{"text": prompt}]
     if image_base64:
@@ -47,8 +48,23 @@ def call_gemini(prompt: str, image_base64: str = None, mime_type: str = "image/j
     return safe_parse_json(text)
 
 
-def call_grok(prompt: str, image_base64: str = None, mime_type: str = "image/jpeg"):
-    url = "https://api.x.ai/v1/chat/completions"
+def call_gemini(prompt: str, image_base64: str = None, mime_type: str = "image/jpeg"):
+    """Tries the first Gemini key, then the second, before giving up on Gemini entirely."""
+    keys_to_try = [k for k in [GEMINI_API_KEY, GEMINI_API_KEY_2] if k]
+
+    last_error = None
+    for key in keys_to_try:
+        try:
+            return _call_gemini_with_key(key, prompt, image_base64, mime_type)
+        except Exception as e:
+            last_error = e
+            print(f"Gemini key failed, trying next: {e}")
+
+    raise last_error if last_error else Exception("No Gemini API keys configured")
+
+
+def call_groq(prompt: str, image_base64: str = None, mime_type: str = "image/jpeg"):
+    url = "https://api.groq.com/openai/v1/chat/completions"
 
     content = [{"type": "text", "text": prompt}]
     if image_base64:
@@ -59,17 +75,17 @@ def call_grok(prompt: str, image_base64: str = None, mime_type: str = "image/jpe
 
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {GROK_API_KEY}"
+        "Authorization": f"Bearer {GROQ_API_KEY}"
     }
     body = {
-        "model": "grok-4.3",
+        "model": "qwen/qwen3.6-27b",
         "messages": [{"role": "user", "content": content}],
         "temperature": 0.3
     }
 
     res = requests.post(url, headers=headers, json=body, timeout=30)
     if not res.ok:
-        raise Exception(f"Grok failed: {res.status_code} {res.text}")
+        raise Exception(f"Groq failed: {res.status_code} {res.text}")
 
     data = res.json()
     text = data["choices"][0]["message"]["content"]
@@ -115,17 +131,22 @@ def call_openrouter(prompt: str, image_base64: str = None, mime_type: str = "ima
 
 
 def ask_ai(prompt: str, image_base64: str = None, mime_type: str = "image/jpeg"):
+    """
+    Tries Gemini (key 1 -> key 2) -> Groq -> OpenRouter (2 free models) in order.
+    Returns dict: {"data": <parsed JSON>, "provider_used": <str>}
+    Raises if all fail.
+    """
     try:
         data = call_gemini(prompt, image_base64, mime_type)
         return {"data": data, "provider_used": "gemini"}
     except Exception as e:
-        print(f"Gemini failed, falling back to Grok: {e}")
+        print(f"Gemini (both keys) failed, falling back to Groq: {e}")
 
     try:
-        data = call_grok(prompt, image_base64, mime_type)
-        return {"data": data, "provider_used": "grok"}
+        data = call_groq(prompt, image_base64, mime_type)
+        return {"data": data, "provider_used": "groq"}
     except Exception as e:
-        print(f"Grok failed, falling back to OpenRouter: {e}")
+        print(f"Groq failed, falling back to OpenRouter: {e}")
 
     try:
         data = call_openrouter(prompt, image_base64, mime_type)
