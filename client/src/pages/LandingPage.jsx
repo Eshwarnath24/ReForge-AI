@@ -64,7 +64,7 @@ function LandingPage() {
   }, []);
 
   function handleGetStarted() {
-    navigate(isLoggedIn() ? "/app" : "/auth");
+    navigate(isLoggedIn() ? "/reforgepage" : "/auth");
   }
 
   function handleScroll(e, targetId) {

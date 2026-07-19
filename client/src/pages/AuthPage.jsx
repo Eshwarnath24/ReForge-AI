@@ -25,7 +25,7 @@ function AuthPage() {
 
       saveAuth(data.access_token, data.email);
       toast.success(mode === "login" ? "Welcome back!" : "Account created!");
-      navigate("/app");
+      navigate("/reforgepage");
     } catch (err) {
       const message = err.response?.data?.detail || "Something went wrong.";
       toast.error(message);

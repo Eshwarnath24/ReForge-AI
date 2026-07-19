@@ -12,12 +12,16 @@ function App() {
       <Route
         path="/auth"
         element={
-          isLoggedIn() ? <Navigate to="/app" replace /> : <AuthPage />
+          isLoggedIn() ? <Navigate to="/reforgepage" replace /> : <AuthPage />
         }
       />
-      <Route 
-        path="/app" 
-        element={isLoggedIn() ? <ReForgePage /> : <Navigate to="/auth" replace />} 
+      <Route
+        path="/reforgepage"
+        element={isLoggedIn() ? <ReForgePage /> : <Navigate to="/auth" replace />}
+      />
+      <Route
+        path="/app"
+        element={<Navigate to="/reforgepage" replace />}
       />
       {/* Catch-all: send unknown paths to landing */}
       <Route path="*" element={<Navigate to="/" replace />} />
