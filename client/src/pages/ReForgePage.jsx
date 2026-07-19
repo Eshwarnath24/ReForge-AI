@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
 import AnalyzingOverlay, { LOADING_MESSAGES } from "../components/AnalyzingOverlay.jsx";
 import { analyzeItem, sendFeedback } from "../api.js";
-import { isLoggedIn, clearAuth, getEmail } from "../auth.js";
+import { useAuth } from "../AuthContext.jsx";
 import {
   Sprout, UploadCloud, X, Check,
   Leaf, Wind, Clock, Wrench, AlertTriangle,
@@ -225,6 +225,7 @@ function MatchCard({ match, index }) {
    ════════════════════════════════════════════════════════ */
 function ReForgePage() {
   const navigate = useNavigate();
+  const { logout, email: userEmailFromAuth } = useAuth();
 
   // ── State ──────────────────────────────────────────
   const [appState, setAppState] = useState("idle"); // idle | analyzing | results
@@ -366,14 +367,14 @@ function ReForgePage() {
   }
 
   function handleLogout() {
-    clearAuth();
+    logout();
     navigate("/");
   }
 
   // ── Guard ──────────────────────────────────────────
   // Handled by App.jsx guard
 
-  const userEmail = getEmail() || "";
+  const userEmail = userEmailFromAuth || "";
   const userInitial = userEmail.charAt(0).toUpperCase() || "?";
 
   function formatWeight(grams) {

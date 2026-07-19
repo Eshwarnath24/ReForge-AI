@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
-import { signup, login } from "../api.js";
-import { saveAuth } from "../auth.js";
+import { signup, login as loginApi } from "../api.js";
+import { useAuth } from "../AuthContext.jsx";
 import { Sprout, Mail, Lock, LogIn, ArrowLeft } from "../components/Icons.jsx";
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,10 +21,10 @@ function AuthPage() {
     try {
       const data =
         mode === "login"
-          ? await login(email, password)
+          ? await loginApi(email, password)
           : await signup(email, password);
 
-      saveAuth(data.access_token, data.email);
+      login(data.access_token, data.email);
       toast.success(mode === "login" ? "Welcome back!" : "Account created!");
       navigate("/reforgepage");
     } catch (err) {
