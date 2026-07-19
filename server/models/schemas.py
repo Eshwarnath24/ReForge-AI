@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import List, Optional
 
 
@@ -43,12 +43,12 @@ class FeedbackRequest(BaseModel):
 
 
 class SignupRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 

@@ -19,4 +19,5 @@ def init_db():
     feedback_collection.create_index([("source", 1), ("item_id", 1)])
     feedback_collection.create_index("user_id")
     projects_collection.create_index("id", unique=True)
+
     print("MongoDB connected and indexes ensured.")

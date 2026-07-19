@@ -1,7 +1,9 @@
-from fastapi import HTTPException, Depends
-from fastapi.security import OAuth2PasswordBearer
+import jwt
+from fastapi import HTTPException, Request
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends
 
-from db.user_repository import create_user, find_user_by_email, find_user_by_id
+from db.user_repository import create_user, find_user_by_email
 from services.auth_service import (
     hash_password,
     verify_password,
@@ -9,7 +11,8 @@ from services.auth_service import (
     decode_access_token,
 )
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+# FastAPI security scheme — extracts "Bearer <token>" from the Authorization header
+_bearer_scheme = HTTPBearer()
 
 
 async def signup_controller(email: str, password: str):
@@ -33,13 +36,14 @@ async def login_controller(email: str, password: str):
     return {"access_token": token, "token_type": "bearer", "email": user["email"]}
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    payload = decode_access_token(token)
-    if not payload:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-
-    user = find_user_by_id(payload["sub"])
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-
-    return user
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(_bearer_scheme),
+):
+    """FastAPI dependency — validates the JWT from the Authorization header."""
+    try:
+        payload = decode_access_token(credentials.credentials)
+        return {"id": payload["sub"], "email": payload["email"]}
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
