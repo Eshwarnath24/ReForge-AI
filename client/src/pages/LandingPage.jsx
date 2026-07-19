@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../auth.js";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
@@ -6,11 +7,72 @@ import {
   Database, Bot, Activity,
 } from "../components/Icons.jsx";
 
+function MailIcon({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
+
+function ExternalLinkIcon({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
+}
+
 function LandingPage() {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in-up');
+          entry.target.classList.remove('opacity-0');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const elements = document.querySelectorAll('.scroll-animate');
+    elements.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   function handleGetStarted() {
     navigate(isLoggedIn() ? "/app" : "/auth");
+  }
+
+  function handleScroll(e, targetId) {
+    e.preventDefault();
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   return (
@@ -21,10 +83,21 @@ function LandingPage() {
       <nav className="fixed w-full z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2.5 text-slate-900 font-bold text-2xl tracking-tight">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <div className="w-10 h-10 rounded-[14px] bg-[#00cfa5] flex items-center justify-center">
               <Sprout className="w-5 h-5 text-white" />
             </div>
-            ReForge<span className="text-emerald-600 font-light">AI</span>
+            ReForge <span className="text-[#00cfa5] font-bold">AI</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+            <a href="#features" onClick={(e) => handleScroll(e, 'features')} className="hover:text-emerald-600 transition-colors">
+              Features
+            </a>
+            <a href="#how-it-works" onClick={(e) => handleScroll(e, 'how-it-works')} className="hover:text-emerald-600 transition-colors">
+              How it works
+            </a>
+            <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="hover:text-emerald-600 transition-colors">
+              Contact
+            </a>
           </div>
           <div className="flex items-center gap-4">
             <button
@@ -90,7 +163,7 @@ function LandingPage() {
       </main>
 
       {/* Features Section */}
-      <section className="relative z-10 py-32 bg-white/40 backdrop-blur-xl border-t border-white/50 shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
+      <section id="features" className="relative z-10 py-32 bg-white/40 backdrop-blur-xl border-t border-white/50 shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-3xl md:text-5xl font-semibold text-slate-900 mb-6">
@@ -141,6 +214,75 @@ function LandingPage() {
             </div>
           </div>
         </div>
+
+
+        {/* How It Works - Pipeline */}
+        <section id="how-it-works" className="relative z-10 py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-4">
+                How it works
+              </h2>
+              <p className="text-slate-600">From photo to project, in a few seconds.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {[
+                { step: "01", label: "Upload a photo", desc: "Snap or drag in a picture of what you'd normally throw out." },
+                { step: "02", label: "AI detects items", desc: "We identify the materials and condition automatically." },
+                { step: "03", label: "Agent reasons", desc: "Checks our verified database, YouTube, and your past preferences." },
+                { step: "04", label: "Get your project", desc: "Top 3 ranked ideas — with steps, safety notes, and impact." },
+              ].map((item, i) => (
+                <div key={i} className="scroll-animate opacity-0 relative bg-white/60 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm p-6 group hover:-translate-y-2 hover:shadow-xl hover:bg-white/80 transition-all duration-300" style={{ animationDelay: `${i * 150}ms` }}>
+                  <div className="inline-flex items-center justify-center min-w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-3xl font-bold mb-4 shadow-sm group-hover:scale-110 group-hover:bg-emerald-100 transition-all duration-300">
+                    {item.step}
+                  </div>
+                  <h3 className="font-semibold text-slate-900 mb-2">{item.label}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                  {i < 3 && (
+                    <div className="hidden md:block absolute top-1/2 -right-5 z-20 -translate-y-1/2 text-emerald-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all duration-300">
+                      <ArrowRight className="w-6 h-6" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact / About Footer */}
+        <footer id="contact" className="relative z-10 py-16 px-6 border-t border-white/50">
+          <div className="max-w-sm mx-auto">
+            <div className="bg-white/70 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 text-center group hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+              <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-lg transition-all duration-500">
+                <span className="text-emerald-700 font-bold text-lg">GE</span>
+              </div>
+
+              <h3 className="font-bold text-slate-900 text-lg">Gajula Eshwarnath</h3>
+              <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wider mt-1 mb-6">
+                Full Stack Developer & AI Engineer
+              </p>
+
+              <div className="flex items-center justify-center gap-4">
+                <a
+                  href="mailto:gajulaeshwarnath13@gmail.com"
+                  className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white hover:bg-emerald-500 hover:border-emerald-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300"
+                >
+                  <MailIcon className="w-4 h-4" />
+                </a>
+
+                <a
+                  href="https://github.com/Eshwarnath24/ReForge-AI"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white hover:bg-emerald-500 hover:border-emerald-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300"
+                >
+                  <ExternalLinkIcon className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </footer>
       </section>
     </div>
   );

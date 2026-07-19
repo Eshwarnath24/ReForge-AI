@@ -26,9 +26,10 @@ function Icon({ children, className, ...rest }) {
 export function Sprout({ className }) {
   return (
     <Icon className={className}>
-      <path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" />
-      <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" />
-      <path d="M5 21h14" />
+      <path d="M7 18h10" />
+      <path d="M12 18V8" />
+      <path d="M12 8 Q12 4 16 4 Q16 8 12 8" />
+      <path d="M12 14 Q8 14 8 10 Q12 10 12 14" />
     </Icon>
   );
 }
@@ -48,6 +49,15 @@ export function ArrowRight({ className }) {
     <Icon className={className}>
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
+    </Icon>
+  );
+}
+
+export function ArrowLeft({ className }) {
+  return (
+    <Icon className={className}>
+      <path d="m12 19-7-7 7-7" />
+      <path d="M19 12H5" />
     </Icon>
   );
 }

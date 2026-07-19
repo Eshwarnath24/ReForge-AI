@@ -15,7 +15,10 @@ function App() {
           isLoggedIn() ? <Navigate to="/app" replace /> : <AuthPage />
         }
       />
-      <Route path="/app" element={<ReForgePage />} />
+      <Route 
+        path="/app" 
+        element={isLoggedIn() ? <ReForgePage /> : <Navigate to="/auth" replace />} 
+      />
       {/* Catch-all: send unknown paths to landing */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

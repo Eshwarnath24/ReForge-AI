@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
 import { signup, login } from "../api.js";
 import { saveAuth } from "../auth.js";
-import { Sprout, Mail, Lock, LogIn } from "../components/Icons.jsx";
+import { Sprout, Mail, Lock, LogIn, ArrowLeft } from "../components/Icons.jsx";
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -39,8 +39,16 @@ function AuthPage() {
       <AnimatedBackground />
 
       <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 relative z-10 animate-fade-in-up">
+        <button 
+          onClick={() => navigate("/")}
+          className="absolute top-6 left-6 text-slate-400 hover:text-emerald-600 hover:-translate-x-1 transition-all bg-transparent p-0 flex items-center justify-center"
+          title="Back to home"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+
         <div className="flex justify-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <div className="w-12 h-12 rounded-[16px] bg-[#00cfa5] flex items-center justify-center">
             <Sprout className="w-6 h-6 text-white" />
           </div>
         </div>

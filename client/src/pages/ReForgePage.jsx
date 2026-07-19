@@ -97,21 +97,19 @@ function MatchCard({ match, index }) {
         <div className="flex gap-2 shrink-0">
           <button
             onClick={() => handleVote("like")}
-            className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all shadow-sm ${
-              voted === "like"
+            className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all shadow-sm ${voted === "like"
                 ? "bg-emerald-500 border-emerald-500 text-white"
                 : "bg-white border-slate-200 text-slate-400 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50"
-            }`}
+              }`}
           >
             <ThumbsUp className="w-4 h-4" />
           </button>
           <button
             onClick={() => handleVote("dislike")}
-            className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all shadow-sm ${
-              voted === "dislike"
+            className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all shadow-sm ${voted === "dislike"
                 ? "bg-rose-500 border-rose-500 text-white"
                 : "bg-white border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50"
-            }`}
+              }`}
           >
             <ThumbsDown className="w-4 h-4" />
           </button>
@@ -242,11 +240,7 @@ function ReForgePage() {
   const fileInputRef = useRef(null);
   const abortControllerRef = useRef(null);
   // ── Route protection ───────────────────────────────
-  useEffect(() => {
-    if (!isLoggedIn()) {
-      navigate("/auth", { replace: true });
-    }
-  }, [navigate]);
+  // Handled by App.jsx guard
 
   // ── Loading-message cycling + transition to results ─
   //
@@ -377,7 +371,7 @@ function ReForgePage() {
   }
 
   // ── Guard ──────────────────────────────────────────
-  if (!isLoggedIn()) return null;
+  // Handled by App.jsx guard
 
   const userEmail = getEmail() || "";
   const userInitial = userEmail.charAt(0).toUpperCase() || "?";
@@ -398,13 +392,13 @@ function ReForgePage() {
       <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div
-            className="flex items-center gap-2 text-slate-900 font-semibold text-xl cursor-pointer hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 text-slate-900 font-bold text-xl cursor-pointer hover:opacity-80 transition-opacity"
             onClick={resetApp}
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-[11px] bg-[#00cfa5] flex items-center justify-center">
               <Sprout className="w-4 h-4 text-white" />
             </div>
-            ReForge<span className="text-emerald-600 font-light">AI</span>
+            ReForge <span className="text-[#00cfa5] font-bold">AI</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -450,11 +444,10 @@ function ReForgePage() {
                   onDrop={handleDrop}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
-                  className={`border-2 border-dashed rounded-3xl p-16 flex flex-col items-center justify-center cursor-pointer transition-all group ${
-                    isDragging
+                  className={`border-2 border-dashed rounded-3xl p-16 flex flex-col items-center justify-center cursor-pointer transition-all group ${isDragging
                       ? "border-emerald-400 bg-emerald-50/50"
                       : "border-slate-200 bg-slate-50 hover:bg-emerald-50/50 hover:border-emerald-300"
-                  }`}
+                    }`}
                 >
                   <div className="w-16 h-16 bg-white border border-slate-100 text-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all">
                     <UploadCloud className="w-8 h-8" />
@@ -524,11 +517,10 @@ function ReForgePage() {
                 <button
                   onClick={startAnalysis}
                   disabled={!selectedImage}
-                  className={`w-full sm:w-auto px-8 py-3.5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all ${
-                    selectedImage
+                  className={`w-full sm:w-auto px-8 py-3.5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all ${selectedImage
                       ? "bg-slate-900 text-white hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5"
                       : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"
-                  }`}
+                    }`}
                 >
                   Generate Ideas
                 </button>
