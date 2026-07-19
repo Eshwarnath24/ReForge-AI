@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
-import { signup, login as loginApi } from "../api.js";
-import { useAuth } from "../AuthContext.jsx";
+import { signup, login as loginApi } from "../utils/api.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import { Sprout, Mail, Lock, LogIn, ArrowLeft } from "../components/Icons.jsx";
 
 function AuthPage() {

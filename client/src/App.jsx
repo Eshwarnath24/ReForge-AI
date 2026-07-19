@@ -2,11 +2,18 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
 import ReForgePage from "./pages/ReForgePage.jsx";
-import { useAuth } from "./AuthContext.jsx";
-import "./App.css";
+import { useAuth } from "./context/AuthContext.jsx";
 
 function App() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, checking } = useAuth();
+
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-500">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <Routes>

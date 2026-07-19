@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
 import AnalyzingOverlay, { LOADING_MESSAGES } from "../components/AnalyzingOverlay.jsx";
-import { analyzeItem, sendFeedback } from "../api.js";
-import { useAuth } from "../AuthContext.jsx";
+import { analyzeItem, sendFeedback } from "../utils/api.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import {
   Sprout, UploadCloud, X, Check,
   Leaf, Wind, Clock, Wrench, AlertTriangle,

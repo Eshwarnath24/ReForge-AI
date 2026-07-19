@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { isLoggedIn } from "../auth.js";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import {
   Sprout, ScanLine, ArrowRight,
   Database, Bot, Activity,
@@ -46,6 +46,7 @@ function ExternalLinkIcon({ className }) {
 
 function LandingPage() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -64,7 +65,7 @@ function LandingPage() {
   }, []);
 
   function handleGetStarted() {
-    navigate(isLoggedIn() ? "/reforgepage" : "/auth");
+    navigate(isLoggedIn ? "/reforgepage" : "/auth");
   }
 
   function handleScroll(e, targetId) {
